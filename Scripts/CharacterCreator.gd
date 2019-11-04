@@ -46,7 +46,10 @@ func load_sprite():
 	face("down")
 	skin.modulate = skinTone
 	eyesColor.modulate = eyeColor
+	setHairTo(hairStyle)
 	hair.modulate = hairColor
+	
+
 	
 func load_color_squares():
 	var normalTexture = load("res://Assets/ui/whiteSquare.png")

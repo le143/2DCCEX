@@ -1,10 +1,26 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://Scripts/CharacterCreator.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/CharacterSprite.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Assets/ui/whiteSquare.png" type="Texture" id=3]
-[ext_resource path="res://Assets/ui/leftArrow.png" type="Texture" id=4]
-[ext_resource path="res://Assets/ui/rightArrow.png" type="Texture" id=5]
+[ext_resource path="res://Assets/ui/HelvetiPixel.ttf" type="DynamicFontData" id=4]
+[ext_resource path="res://Assets/ui/leftArrow.png" type="Texture" id=5]
+[ext_resource path="res://Assets/ui/rightArrow.png" type="Texture" id=6]
+
+[sub_resource type="DynamicFont" id=1]
+font_data = ExtResource( 4 )
+
+[sub_resource type="DynamicFont" id=2]
+font_data = ExtResource( 4 )
+
+[sub_resource type="DynamicFont" id=3]
+font_data = ExtResource( 4 )
+
+[sub_resource type="DynamicFont" id=4]
+font_data = ExtResource( 4 )
+
+[sub_resource type="DynamicFont" id=5]
+font_data = ExtResource( 4 )
 
 [node name="CharacterCreator" type="Control"]
 script = ExtResource( 1 )
@@ -72,69 +88,17 @@ margin_right = 380.0
 margin_bottom = 80.0
 texture_normal = ExtResource( 3 )
 
-[node name="LeftArrow" type="TextureButton" parent="Panel"]
-margin_left = 3.10221
-margin_top = 70.282
-margin_right = 43.1022
-margin_bottom = 110.282
-texture_normal = ExtResource( 4 )
-
-[node name="RightArrow" type="TextureButton" parent="Panel"]
-margin_left = 84.6416
-margin_top = 70.282
-margin_right = 124.642
-margin_bottom = 110.282
-texture_normal = ExtResource( 5 )
-
 [node name="HairStyleOption" type="ItemList" parent="Panel"]
 margin_left = 200.0
 margin_top = 40.0
 margin_right = 300.0
 margin_bottom = 80.0
 
-[node name="Create" type="Button" parent="Panel"]
-margin_left = 33.9483
-margin_top = 157.462
-margin_right = 86.9483
-margin_bottom = 177.462
-text = "Create"
-
-[node name="Randomize" type="Button" parent="Panel"]
-margin_left = 20.8694
-margin_top = 133.959
-margin_right = 103.869
-margin_bottom = 153.959
-text = "Randomize"
-
-[node name="Labels" type="Control" parent="Panel"]
-editor/display_folded = true
-margin_left = 120.0
-margin_top = 14.0
-margin_right = 160.0
-margin_bottom = 54.0
-
-[node name="skinToneLabel" type="Label" parent="Panel/Labels"]
-margin_right = 65.0
-margin_bottom = 14.0
-text = "Skin Tone:"
-
-[node name="hairStylesLabel" type="Label" parent="Panel/Labels"]
-margin_top = 26.0
-margin_right = 72.0
-margin_bottom = 40.0
-text = "Hair Styles:"
-
-[node name="hairColor" type="Label" parent="Panel/Labels"]
-margin_top = 106.0
-margin_right = 67.0
-margin_bottom = 120.0
-text = "Hair Color:"
-
 [node name="ColorPickerControl" type="Control" parent="Panel"]
 editor/display_folded = true
-margin_left = 199.763
+margin_left = 200.0
 margin_top = 80.0
-margin_right = 239.763
+margin_right = 240.0
 margin_bottom = 120.0
 rect_scale = Vector2( 0.898807, 0.826937 )
 
@@ -147,9 +111,65 @@ rect_scale = Vector2( 0.417873, 0.41103 )
 __meta__ = {
 "_edit_lock_": true
 }
+
+[node name="Labels" type="Control" parent="Panel"]
+margin_left = 120.0
+margin_top = 14.0
+margin_right = 160.0
+margin_bottom = 54.0
+
+[node name="skinToneLabel" type="Label" parent="Panel/Labels"]
+margin_right = 65.0
+margin_bottom = 14.0
+custom_fonts/font = SubResource( 1 )
+text = "Skin Tone:"
+
+[node name="hairStylesLabel" type="Label" parent="Panel/Labels"]
+margin_top = 26.0
+margin_right = 72.0
+margin_bottom = 40.0
+custom_fonts/font = SubResource( 2 )
+text = "Hair Styles:"
+
+[node name="hairColor" type="Label" parent="Panel/Labels"]
+margin_top = 106.0
+margin_right = 67.0
+margin_bottom = 120.0
+custom_fonts/font = SubResource( 3 )
+text = "Hair Color:"
+
+[node name="LeftArrow" type="TextureButton" parent="Panel"]
+margin_left = 3.10221
+margin_top = 70.0
+margin_right = 43.1022
+margin_bottom = 110.0
+texture_normal = ExtResource( 5 )
+
+[node name="RightArrow" type="TextureButton" parent="Panel"]
+margin_left = 84.6416
+margin_top = 70.0
+margin_right = 124.642
+margin_bottom = 110.0
+texture_normal = ExtResource( 6 )
+
+[node name="Randomize" type="Button" parent="Panel"]
+margin_left = 20.0
+margin_top = 133.959
+margin_right = 103.0
+margin_bottom = 153.959
+custom_fonts/font = SubResource( 4 )
+text = "Randomize"
+
+[node name="Create" type="Button" parent="Panel"]
+margin_left = 33.9483
+margin_top = 157.462
+margin_right = 86.9483
+margin_bottom = 177.462
+custom_fonts/font = SubResource( 5 )
+text = "Create"
+[connection signal="item_selected" from="Panel/HairStyleOption" to="." method="_on_HairStyleOption_item_selected"]
+[connection signal="color_changed" from="Panel/ColorPickerControl/ColorPicker" to="." method="_on_ColorPicker_color_changed"]
 [connection signal="pressed" from="Panel/LeftArrow" to="." method="_on_LeftArrow_pressed"]
 [connection signal="pressed" from="Panel/RightArrow" to="." method="_on_RightArrow_pressed"]
-[connection signal="item_selected" from="Panel/HairStyleOption" to="." method="_on_HairStyleOption_item_selected"]
-[connection signal="pressed" from="Panel/Create" to="." method="_on_Create_pressed"]
 [connection signal="pressed" from="Panel/Randomize" to="." method="_on_Randomize_pressed"]
-[connection signal="color_changed" from="Panel/ColorPickerControl/ColorPicker" to="." method="_on_ColorPicker_color_changed"]
+[connection signal="pressed" from="Panel/Create" to="." method="_on_Create_pressed"]
