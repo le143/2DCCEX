@@ -1,6 +1,3 @@
-#A Very Basic Character Creator 
-#by u/le143
-
 extends Control
 
 
@@ -21,8 +18,7 @@ var selectedHairStyle
 
 
 var skinTones = ["FFDBAC", "F1C27D", "E0AC69", "C68642", "8D5524"]
-var hairStyles = ["bald","afro","combover","mohawk"]
-
+var hairStyles = ["bald", "afro", "combover", "mohawk"]
 
 
 var skinTone = "FFDBAC"
@@ -39,8 +35,8 @@ func _ready():
 	load_color_squares()
 	
 	for button in get_tree().get_nodes_in_group("color_btns"):
-	    button.connect("pressed", self, "_colorButtonPressed", [button])
-	    button.connect("focus_entered", self, "_colorButtonFocus", [button])	
+	    button.connect("pressed", self, "_colorButtonPressed", [button])	
+
 
 func load_sprite():
 	face("down")
@@ -48,9 +44,8 @@ func load_sprite():
 	eyesColor.modulate = eyeColor
 	setHairTo(hairStyle)
 	hair.modulate = hairColor
-	
 
-	
+
 func load_color_squares():
 	var normalTexture = load("res://Assets/ui/whiteSquare.png")
 	var selectedTexture = load("res://Assets/ui/whiteSquare-selected.png")
@@ -71,11 +66,39 @@ func load_hair_styles_list():
 		var temp_icon = icon_path.replace("placeholder", hairStyles[i])
 		var icon = ResourceLoader.load(temp_icon)
 		hairStyleOption.add_item("",icon)
-		
-		
-func _colorButtonFocus(button):
-	var color = button.modulate
-	skin.modulate = color
+
+
+func randomize_appearance():
+	#RANDOM SKIN COLOR
+	var skinTonesIndex = randi() % skinTones.size()
+	var randomSkinColor = skinTones[skinTonesIndex]
+	skin.modulate = randomSkinColor
+	skinTone = randomSkinColor
+	selectedSkinToneBtn = colorSquares.get_child(skinTonesIndex)
+	
+	
+	#RANDOM HAIR STYLE
+	var randomHairIndex = randi() % hairStyles.size()
+	var randomHairStyle = hairStyles[randomHairIndex]
+	setHairTo(randomHairStyle)
+	hairStyleOption.select(randomHairIndex)
+	selectedHairStyle = randomHairIndex
+	hairStyleOption.ensure_current_is_visible()
+
+
+	#RANDOM HAIR COLOR
+	var randomHairColor = Color(randf(), randf(), randf(), 1)
+	hair.set_modulate(randomHairColor)
+	hairColor = randomHairColor.to_html()
+	colorPicker.color = randomHairColor
+	
+
+	load_color_squares()
+
+
+func _on_Randomize_pressed():
+	randomize_appearance()
+
 
 func _colorButtonPressed(button): 
 	var color = Color(button.modulate)
@@ -87,75 +110,29 @@ func _colorButtonPressed(button):
 	load_color_squares()		
 
 
-	
-
-
-
 func _on_ColorPicker_color_changed(color):
 	hair.modulate = color
 	hairColor = color
 
 
+func _on_HairStyleOption_item_selected(index):
+	setHairTo(hairStyles[index])
 
-func randomize_appearance():
-	#RANDOM HAIR COLOR
-	var randomHairColor = Color(randf(), randf(), randf(), 1)
-	hair.set_modulate(randomHairColor)
-	hairColor = randomHairColor.to_html()
-	colorPicker.color = randomHairColor
-	
-	#RANDOM SKIN COLOR
-	var skinTonesIndex = randi() % skinTones.size()
-	var randomSkinColor = skinTones[skinTonesIndex]
-	skin.modulate = randomSkinColor
-	skinTone = randomSkinColor
-	selectedSkinToneBtn = colorSquares.get_child(skinTonesIndex)
-	
-	#RANDOM HAIR STYLE
-	var randomHairIndex = randi() % hairStyles.size()
-	var randomHairStyle = hairStyles[randomHairIndex]
-	setHairTo(randomHairStyle)
-	hairStyleOption.select(randomHairIndex)
-	selectedHairStyle = randomHairIndex
-	hairStyleOption.ensure_current_is_visible()
-
-	load_color_squares()
-	
-	
-func _on_Randomize_pressed():
-	randomize_appearance()
-
-func face(direction:String):
-	var frame
-	match direction:
-		"down":
-			frame = 0
-			faceDir = "down"
-		"up":
-			frame = 1
-			faceDir = "up"
-		"left":
-			frame = 2
-			faceDir = "left"
-		"right":
-			frame = 3
-			faceDir = "right"
-	
-	skin.frame = frame
-	clothes.frame = frame
-	eyesWhite.frame = frame
-	eyesColor.frame = frame
-	hair.frame = frame
 
 func setHairTo(style):
 	var path = "res://Assets/player/hairStyles/" + style + ".png"
 	hair.texture = load(path)
 	hairStyle = style
-	
-func _on_HairStyleOption_item_selected(index):
-	setHairTo(hairStyles[index])
 
-		
+
+func _on_Create_pressed():
+	Global.skinTone = skinTone
+	Global.hairStyle = hairStyle
+	Global.hairColor = hairColor
+	Global.eyeColor = eyeColor
+	
+	get_tree().change_scene("res://Scenes/PlayerController.tscn")
+
 
 func _on_LeftArrow_pressed():
 	match faceDir:
@@ -180,10 +157,25 @@ func _on_RightArrow_pressed():
 		"left":
 			face("down")
 
-func _on_Create_pressed():
-	Global.skinTone = skinTone
-	Global.hairStyle = hairStyle
-	Global.hairColor = hairColor
-	Global.eyeColor = eyeColor
+
+func face(direction:String):
+	var frame
+	match direction:
+		"down":
+			frame = 0
+			faceDir = "down"
+		"up":
+			frame = 1
+			faceDir = "up"
+		"left":
+			frame = 2
+			faceDir = "left"
+		"right":
+			frame = 3
+			faceDir = "right"
 	
-	get_tree().change_scene("res://Scenes/PlayerController.tscn")
+	skin.frame = frame
+	clothes.frame = frame
+	eyesWhite.frame = frame
+	eyesColor.frame = frame
+	hair.frame = frame
